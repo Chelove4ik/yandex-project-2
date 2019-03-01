@@ -1,203 +1,143 @@
-import pygame
-
 gl_cell_size = 45
 
 color_list = {
-    'I': pygame.Color('blue'),
-    'J': pygame.Color('DARKSLATEBLUE'),
-    'L': pygame.Color('orange'),
-    'O': pygame.Color('yellow'),
-    'S': pygame.Color('green'),
-    'T': pygame.Color('purple'),
-    'Z': pygame.Color('red')
+    0: (100, 100, 100),
+    'I': (0, 0, 255),  # blue
+    'J': (72, 61, 139),  # DARKSLATEBLUE
+    'L': (255, 165, 0),  # orange
+    'O': (255, 255, 0),  # yellow
+    'S': (0, 255, 0),  # green
+    'T': (160, 32, 240),  # purple
+    'Z': (255, 0, 0),  # red
+    'stone': (139, 141, 122)
 }
 
 
-def I(screen, x, y, napr):
-    pygame.draw.rect(screen, color_list['I'], (x, y, gl_cell_size if napr == 1 or napr == 3 else gl_cell_size * 4,
-                                               gl_cell_size if napr == 0 or napr == 2 else gl_cell_size * 4))
-
-
-def J(screen, x, y, napr):
+def I(pole, x, y, napr):
     if napr == 0:
-        lst = [
-            (x + gl_cell_size, y),
-            (x + gl_cell_size * 2, y),
-            (x + gl_cell_size * 2, y + gl_cell_size * 3),
-            (x, y + gl_cell_size * 3),
-            (x, y + gl_cell_size * 2),
-            (x + gl_cell_size, y + gl_cell_size * 2),
-        ]
+        pole.board[y][x + 1] = 'I'
+        pole.board[y][x + 2] = 'I'
+        pole.board[y][x + 3] = 'I'
+        pole.board[y][x + 4] = 'I'
     elif napr == 1:
-        lst = [
-            (x, y),
-            (x + gl_cell_size, y),
-            (x + gl_cell_size, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size * 2),
-            (x, y + gl_cell_size * 2),
-        ]
+        pole.board[y - 1][x + 1] = 'I'
+        pole.board[y][x + 1] = 'I'
+        pole.board[y + 1][x + 1] = 'I'
+        pole.board[y + 2][x + 1] = 'I'
     elif napr == 2:
-        lst = [
-            (x + gl_cell_size, y),
-            (x + gl_cell_size * 3, y),
-            (x + gl_cell_size * 3, y + gl_cell_size),
-            (x + gl_cell_size * 2, y + gl_cell_size),
-            (x + gl_cell_size * 2, y + gl_cell_size * 3),
-            (x + gl_cell_size, y + gl_cell_size * 3),
-        ]
+        pole.board[y][x + 2] = 'I'
+        pole.board[y][x + 1] = 'I'
+        pole.board[y][x] = 'I'
+        pole.board[y][x - 1] = 'I'
     elif napr == 3:
-        lst = [
-            (x, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size * 3),
-            (x + gl_cell_size * 2, y + gl_cell_size * 3),
-            (x + gl_cell_size * 2, y + gl_cell_size * 2),
-            (x, y + gl_cell_size * 2),
-        ]
-    pygame.draw.polygon(screen, color_list['J'], lst)
+        pole.board[y + 1][x + 1] = 'I'
+        pole.board[y][x + 1] = 'I'
+        pole.board[y - 1][x + 1] = 'I'
+        pole.board[y - 2][x + 1] = 'I'
 
 
-def L(screen, x, y, napr):
+def J(pole, x, y, napr):
+    pole.board[y + 1][x + 1] = 'J'  # У всех J
     if napr == 0:
-        lst = [
-            (x + gl_cell_size, y),
-            (x + gl_cell_size * 2, y),
-            (x + gl_cell_size * 2, y + gl_cell_size * 2),
-            (x + gl_cell_size * 3, y + gl_cell_size * 2),
-            (x + gl_cell_size * 3, y + gl_cell_size * 3),
-            (x + gl_cell_size, y + gl_cell_size * 3),
-        ]
+        pole.board[y][x + 1] = 'J'
+        pole.board[y + 2][x + 1] = 'J'
+        pole.board[y + 2][x] = 'J'
     elif napr == 1:
-        lst = [
-            (x, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size * 2),
-            (x + gl_cell_size, y + gl_cell_size * 2),
-            (x + gl_cell_size, y + gl_cell_size * 3),
-            (x, y + gl_cell_size * 3),
-        ]
+        pole.board[y][x] = 'J'
+        pole.board[y + 1][x] = 'J'
+        pole.board[y + 1][x + 2] = 'J'
     elif napr == 2:
-        lst = [
-            (x, y),
-            (x + gl_cell_size * 2, y),
-            (x + gl_cell_size * 2, y + gl_cell_size * 3),
-            (x + gl_cell_size, y + gl_cell_size * 3),
-            (x + gl_cell_size, y + gl_cell_size),
-            (x, y + gl_cell_size),
-        ]
+        pole.board[y][x + 1] = 'J'
+        pole.board[y][x + 2] = 'J'
+        pole.board[y + 2][x + 1] = 'J'
     elif napr == 3:
-        lst = [
-            (x, y + gl_cell_size),
-            (x + gl_cell_size * 2, y + gl_cell_size),
-            (x + gl_cell_size * 2, y),
-            (x + gl_cell_size * 3, y),
-            (x + gl_cell_size * 3, y + gl_cell_size * 2),
-            (x, y + gl_cell_size * 2),
-        ]
-    pygame.draw.polygon(screen, color_list['L'], lst)
+        pole.board[y + 1][x] = 'J'
+        pole.board[y + 1][x + 2] = 'J'
+        pole.board[y + 2][x + 2] = 'J'
 
 
-def O(screen, x, y, napr=None):
-    pygame.draw.rect(screen, color_list['O'], (x, y, gl_cell_size * 2, gl_cell_size * 2))
-
-
-def S(screen, x, y, napr):
-    if napr == 0 or napr == 2:
-        lst = [
-            (x, y + gl_cell_size),
-            (x + gl_cell_size, y + gl_cell_size),
-            (x + gl_cell_size, y),
-            (x + gl_cell_size * 3, y),
-            (x + gl_cell_size * 3, y + gl_cell_size),
-            (x + gl_cell_size * 2, y + gl_cell_size),
-            (x + gl_cell_size * 2, y + gl_cell_size * 2),
-            (x, y + gl_cell_size * 2),
-        ]
-    elif napr == 1 or napr == 3:
-        lst = [
-            (x, y),
-            (x + gl_cell_size, y),
-            (x + gl_cell_size, y + gl_cell_size),
-            (x + gl_cell_size * 2, y + gl_cell_size),
-            (x + gl_cell_size * 2, y + gl_cell_size * 3),
-            (x + gl_cell_size, y + gl_cell_size * 3),
-            (x + gl_cell_size, y + gl_cell_size * 2),
-            (x, y + gl_cell_size * 2),
-        ]
-
-    pygame.draw.polygon(screen, color_list['S'], lst)
-
-
-def T(screen, x, y, napr):
+def L(pole, x, y, napr):
+    pole.board[y + 1][x + 1] = 'L'  # У всех L
     if napr == 0:
-        lst = [
-            (x, y + gl_cell_size),
-            (x + gl_cell_size, y + gl_cell_size),
-            (x + gl_cell_size, y),
-            (x + gl_cell_size * 2, y),
-            (x + gl_cell_size * 2, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size * 2),
-            (x, y + gl_cell_size * 2),
-        ]
+        pole.board[y][x + 1] = 'L'
+        pole.board[y + 2][x + 1] = 'L'
+        pole.board[y + 2][x + 2] = 'L'
     elif napr == 1:
-        lst = [
-            (x + gl_cell_size, y),
-            (x + gl_cell_size * 2, y),
-            (x + gl_cell_size * 2, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size * 2),
-            (x + gl_cell_size * 2, y + gl_cell_size * 2),
-            (x + gl_cell_size * 2, y + gl_cell_size * 3),
-            (x + gl_cell_size, y + gl_cell_size * 3),
-        ]
+        pole.board[y + 1][x] = 'L'
+        pole.board[y + 2][x] = 'L'
+        pole.board[y + 1][x + 2] = 'L'
     elif napr == 2:
-        lst = [
-            (x, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size * 2),
-            (x + gl_cell_size * 2, y + gl_cell_size * 2),
-            (x + gl_cell_size * 2, y + gl_cell_size * 3),
-            (x + gl_cell_size, y + gl_cell_size * 3),
-            (x + gl_cell_size, y + gl_cell_size * 2),
-            (x, y + gl_cell_size * 2),
-        ]
+        pole.board[y][x] = 'L'
+        pole.board[y][x + 1] = 'L'
+        pole.board[y + 2][x + 1] = 'L'
     elif napr == 3:
-        lst = [
-            (x, y + gl_cell_size),
-            (x + gl_cell_size, y + gl_cell_size),
-            (x + gl_cell_size, y),
-            (x + gl_cell_size * 2, y),
-            (x + gl_cell_size * 2, y + gl_cell_size * 3),
-            (x + gl_cell_size, y + gl_cell_size * 3),
-            (x + gl_cell_size, y + gl_cell_size * 2),
-            (x, y + gl_cell_size * 2),
-        ]
-    pygame.draw.polygon(screen, color_list['T'], lst)
+        pole.board[y][x + 2] = 'L'
+        pole.board[y + 1][x] = 'L'
+        pole.board[y + 1][x + 2] = 'L'
 
 
-def Z(screen, x, y, napr):
-    if napr == 0 or napr == 2:
-        lst = [
-            (x, y),
-            (x + gl_cell_size * 2, y),
-            (x + gl_cell_size * 2, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size),
-            (x + gl_cell_size * 3, y + gl_cell_size * 2),
-            (x + gl_cell_size, y + gl_cell_size * 2),
-            (x + gl_cell_size, y + gl_cell_size),
-            (x, y + gl_cell_size),
-        ]
-    elif napr == 1 or napr == 3:
-        lst = [
-            (x + gl_cell_size, y + gl_cell_size),
-            (x + gl_cell_size*2, y + gl_cell_size),
-            (x + gl_cell_size*2, y),
-            (x + gl_cell_size*3, y),
-            (x + gl_cell_size*3, y + gl_cell_size*2),
-            (x + gl_cell_size*2, y + gl_cell_size*2),
-            (x + gl_cell_size*2, y + gl_cell_size*3),
-            (x + gl_cell_size, y + gl_cell_size*3),
-        ]
-    pygame.draw.polygon(screen, color_list['Z'], lst)
+def O(pole, x, y, napr=None):
+    pole.board[y][x] = 'O'
+    pole.board[y + 1][x] = 'O'
+    pole.board[y][x + 1] = 'O'
+    pole.board[y + 1][x + 1] = 'O'
+
+
+def S(pole, x, y, napr):
+    pole.board[y + 1][x + 1] = 'S'  # У всех S
+    if napr == 0:
+        pole.board[y][x + 1] = 'S'
+        pole.board[y + 1][x + 2] = 'S'
+        pole.board[y + 2][x + 2] = 'S'
+    elif napr == 1:
+        pole.board[y + 2][x] = 'S'
+        pole.board[y + 2][x + 1] = 'S'
+        pole.board[y + 1][x + 2] = 'S'
+    elif napr == 2:
+        pole.board[y][x] = 'S'
+        pole.board[y + 1][x] = 'S'
+        pole.board[y + 2][x + 1] = 'S'
+    elif napr == 3:
+        pole.board[y + 1][x] = 'S'
+        pole.board[y][x + 1] = 'S'
+        pole.board[y][x + 2] = 'S'
+
+
+def T(pole, x, y, napr):
+    pole.board[y + 1][x + 1] = 'T'  # У всех T
+    if napr == 0:
+        pole.board[y + 1][x] = 'T'
+        pole.board[y][x + 1] = 'T'
+        pole.board[y + 1][x + 2] = 'T'
+    elif napr == 1:
+        pole.board[y][x + 1] = 'T'
+        pole.board[y + 1][x + 2] = 'T'
+        pole.board[y + 2][x + 1] = 'T'
+    elif napr == 2:
+        pole.board[y + 1][x] = 'T'
+        pole.board[y + 1][x + 2] = 'T'
+        pole.board[y + 2][x + 1] = 'T'
+    elif napr == 3:
+        pole.board[y + 1][x] = 'T'
+        pole.board[y][x + 1] = 'T'
+        pole.board[y + 2][x + 1] = 'T'
+
+
+def Z(pole, x, y, napr):
+    pole.board[y + 1][x + 1] = 'Z'  # У всех Z
+    if napr == 0:
+        pole.board[y][x] = 'Z'
+        pole.board[y][x+1] = 'Z'
+        pole.board[y+1][x+2] = 'Z'
+    elif napr == 1:
+        pole.board[y][x+2] = 'Z'
+        pole.board[y+1][x+2] = 'Z'
+        pole.board[y+2][x+1] = 'Z'
+    elif napr == 2:
+        pole.board[y+1][x] = 'Z'
+        pole.board[y+2][x+1] = 'Z'
+        pole.board[y+2][x+2] = 'Z'
+    elif napr == 3:
+        pole.board[y+2][x] = 'Z'
+        pole.board[y+1][x] = 'Z'
+        pole.board[y][x+1] = 'Z'
