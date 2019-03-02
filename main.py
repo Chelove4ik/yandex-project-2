@@ -15,6 +15,11 @@ def main_fun():
     running = True
     pygame.init()
     pygame.font.init()
+    pygame.mixer.init()
+
+    main_sound = pygame.mixer.Sound(r'data\Tetris.ogg')
+    damage_song = pygame.mixer.Sound(r'data\Damage.wav')
+    game_over_song = pygame.mixer.Sound(r'data\Game over.wav')
 
     myfont = pygame.font.SysFont('Comic Sans MS', 40)
 
@@ -51,17 +56,22 @@ def main_fun():
                     now_fig.move(now_fig.x + 1, now_fig.y)
                 elif event.key == pygame.K_DOWN and not esc:
                     now_fig.move(now_fig.x, now_fig.y + 1)
+                    count += 4
                 elif event.key == pygame.K_ESCAPE:
                     esc = not esc
+                    main_sound.play(-1)
+                elif event.key == pygame.K_F10:
+                    running = False
                 time_for_press = clock()
 
         if esc:
             screen.blit(pause_text, (300, 250))
             pygame.display.flip()
+            main_sound.stop()
             continue
 
         pressed = pygame.key.get_pressed()
-        if clock() - time_for_press > 0.2:
+        if clock() - time_for_press > 0.1:
             if pressed[K_LEFT]:
                 pass
             if pressed[K_RIGHT]:
@@ -69,7 +79,8 @@ def main_fun():
             if pressed[K_UP]:
                 napr = (napr + 1) % 4
             if pressed[K_DOWN]:
-                pass
+                now_fig.move(now_fig.x, now_fig.y + 1)
+                count += 1
             time_for_press = clock()
 
         screen.fill((0, 0, 0))
@@ -92,7 +103,10 @@ def main_fun():
                 text = myfont.render('Ваш счёт = {}'.format(count), False, (255, 255, 255))
                 screen.blit(text, (200, 200))
 
-                text = myfont.render('Чтобы начать заного нажмите spase', False, (255, 255, 255))
+                main_sound.stop()
+                game_over_song.play()
+
+                text = myfont.render('Чтобы начать заново нажмите spase', False, (255, 255, 255))
                 screen.blit(text, (50, 300))
 
                 a = True
@@ -105,12 +119,15 @@ def main_fun():
                             if event.key == pygame.K_SPACE:
                                 pole = Board(screen)
                                 count = 0
+                                game_over_song.stop()
+                                main_sound.play(-1)
                                 a = False
 
             diff_pole = del_line_if_need(pole)
             pole.board = diff_pole[0]
             if diff_pole[1]:
-                count += 100
+                count += 100 * diff_pole[2]
+                damage_song.play()
 
             napr = 0
             now_fig = NowFig(choice(figurs), screen, napr, pole)

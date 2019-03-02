@@ -10,6 +10,7 @@ def check_lose(board):
 
 def del_line_if_need(pole):
     new_board = copy.deepcopy(pole.board)
+    num = 0
     for y in range(pole.heig - 1, -1, -1):
         a = 0
         for x in range(pole.wid):
@@ -18,4 +19,5 @@ def del_line_if_need(pole):
         if a == 10:
             del new_board[y]
             new_board = [['wall', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'wall']] + new_board
-    return new_board, new_board != pole.board
+            num += 1
+    return new_board, new_board != pole.board, num
